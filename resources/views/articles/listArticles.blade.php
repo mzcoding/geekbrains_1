@@ -2,8 +2,13 @@
 
 @section('content')
    <div style="margin-left: 15px;">
-       @foreach($articles as $key => $value)
-           <p><a href="{{ route('article', ['id' => $key]) }}">{{ $key }} - {{ $value }}</a></p>
+       <p>Всего записей: {{ $countArticles }}</p>
+       @foreach($articles as $article)
+           <p>
+               <a href="{{ route('article', ['id' => $article->id]) }}">
+                   {{ $article->id }} - {{ $article->title }}
+               </a>
+           </p>
        @endforeach
    </div>
    <br>

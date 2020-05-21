@@ -1,14 +1,14 @@
-<html>
-<head>
-    <title>Список статей</title>
-</head>
-<body>
+@extends('layouts.main')
+
+@section('content')
 <div style="margin-left: 15px;">
-  @forelse($names as $name)
-     <p>{{ $name }}</p>
-     @empty
-      <h2>Массив пустой</h2>
-  @endforelse
+    @if((bool)$article->published === true)
+    <h3>{{ $article->title }}</h3>
+    <div>
+        {!! $article->text !!}
+    </div>
+    @else
+        <h3>Эта статья в разработке</h3>
+    @endif
 </div>
-</body>
-</html>
+@stop

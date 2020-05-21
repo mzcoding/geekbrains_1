@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Articles;
 
+use App\Article;
 use App\Http\Requests\ArticleRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -31,22 +32,27 @@ class IndexController extends Controller
 
 	public function listArticles(Request $request)
 	{
+		$objArticle = new Article();
+		$articles = $objArticle->allArticles();
+		$count = $objArticle->countArticles();
+
 		return view('articles.listArticles', [
-			'articles' => $this->articles
+			'articles'      => $articles,
+			'countArticles' => $count
 		]);
 	}
 	public function getArticle(int $id)
 	{
-		if(!isset($this->articles[$id])) {
+		$objArticle = new Article();
+		$article = $objArticle->getArticleById($id);
+
+		if(!$article) {
 			return abort(404);
 		}
 
-		$names = [
-		];
 
 		return view('articles.article', [
-			'names'   => $names,
- 			'article' => $this->articles[$id]
+ 			'article' => $article
 		]);
 	}
 
@@ -64,7 +70,10 @@ class IndexController extends Controller
 						  ]);
 
 
-			return redirect()->route('articles');
+			return redirect(route('articles'))
+				->with('success', 'Статья успешно добавлена');
+
+
 
 	}
 }
