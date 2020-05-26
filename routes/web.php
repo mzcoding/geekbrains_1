@@ -14,4 +14,9 @@ Route::group(['prefix' => 'admin'], function() {
 	   ->name('article');
 
     Route::post('/articles.html', 'Articles\IndexController@saveArticle');
+
+    //news
+	Route::resource('/categories', 'News\CategoryController');
+	Route::resource('/news', 'News\NewsController');
 });
+
