@@ -1,3 +1,4 @@
+
 @if(session()->has('success'))
     {{ session()->get('success') }}
 @elseif(session()->has('error'))

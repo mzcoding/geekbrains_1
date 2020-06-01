@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class CategoryController extends Controller
 {
@@ -40,21 +43,22 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $title = $request->input('title');
-        $slug  = $request->input('slug');
+    public function store(CategoryRequest $request)
+	{
+			$title = $request->input('title');
+			$slug = $request->input('slug');
 
-        $category = Category::create([
-        	'title' => $title,
-			'slug'  => $slug
-		]);
-        if($category) {
-        	return redirect()->route('categories.index')
-				    ->with('success', 'Категория успешно добавлена');
-		}
+			$category = Category::create([
+				'title' => $title,
+				'slug' => $slug
+			]);
+			if ($category) {
+				return redirect()->route('categories.index')
+					->with('success', 'Категория успешно добавлена');
+			}
 
-        return back()->with('error', ' Не удалось добавить категорию');
+			return back()->with('error', ' Не удалось добавить категорию');
+
     }
 
     /**
@@ -91,6 +95,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+    	$request->validate([
+    		'title' => ['required', 'min:3'],
+			'slug' => ['required' ,'min:3', Rule::unique('categories')->ignore($category->id)]
+
+		]);
         $category->title = $request->input('title');
         $category->slug  = $request->input('slug');
 
