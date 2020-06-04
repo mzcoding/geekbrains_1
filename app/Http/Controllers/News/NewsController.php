@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\News;
 
+use App\Events\AddNewsEvent;
 use App\Http\Controllers\Controller;
 use App\Models\News;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-    	$news = News::where('status', 'published')->paginate(1);
+    	$news = News::where('status', 'published')->Orwhere('status', 'draft')->paginate(10);
         return view('news.index', ['news' => $news]);
     }
 
@@ -39,6 +40,9 @@ class NewsController extends Controller
     {
         $news = News::create($request->all());
         if($news) {
+        	//add event
+			event(new AddNewsEvent($news));
+
 			return redirect()->route('news.index')
 				->with('success', 'Новость успешно добавлена');
 		}
