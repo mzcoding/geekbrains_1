@@ -11,10 +11,9 @@ Route::group(['middleware' =>  'auth'], function(){
   //for auth routes
 
   //for admin routes
-  Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
-  	Route::get('/', function() {
-  		echo "Привет, я админ";
-	})->name('admin');
+  Route::group(['prefix' => 'admin', 'middleware' => 'admin', 'namespace' => 'Admin'], function() {
+  	Route::get('/', 'UploadController@index')->name('admin');
+	Route::post('/upload', 'UploadController@save')->name('upload.save');
     Route::get('/articles.html',       'Articles\IndexController@listArticles')
 	    ->name('articles');
     Route::get('/articles/{id}.html',  'Articles\IndexController@getArticle')
@@ -52,3 +51,5 @@ Route::get('/logout', function() {
 	Auth::logout();
 	return redirect('/');
 });
+
+Route::get('/news/rss', 'Articles\TestController@news');

@@ -43,4 +43,8 @@ class User extends Authenticatable
 		 $this->last_login_at = Carbon::now();
 		 return $this->save();
 	}
+	public function uploads()
+	{
+		return $this->hasMany(Upload::class, 'user_id', 'id');
+	}
 }
